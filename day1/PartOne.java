@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 class PartOne {
-    public static void main(String []args) {
+    public static void main(String[] args) {
         // Get the file data in two columns
         List<List<Integer>> columns = getFileData();
         List<Integer> leftCol = columns.get(0);
@@ -52,7 +52,7 @@ class PartOne {
                 rightCol.add(lastElementInt);
             }
             reader.close();
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("Something went wrong!");
             e.printStackTrace();
         }

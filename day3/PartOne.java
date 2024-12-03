@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 
 class PartOne {
     public static void main(String[] args) {
-        // Get list of all mul(X,Y) from file
         int totalScore = 0;
         List<Integer> scores = new ArrayList<Integer>();
 
