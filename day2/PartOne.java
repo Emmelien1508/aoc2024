@@ -1,6 +1,5 @@
+package aoc2024.day2;
 
-// The levels are either all increasing or all decreasing.
-// Any two adjacent levels differ by at least one and at most three.
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
@@ -83,4 +82,4 @@ class PartOne {
 
         return files;
     }
-}
+};
