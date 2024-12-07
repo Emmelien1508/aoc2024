@@ -10,7 +10,7 @@ class Calibrator:
         self.evaluate_equations()
 
     def read_file(self):
-        file = open("inputs/test.txt")
+        file = open("inputs/input.txt")
         lines = file.readlines()
 
         for line in lines:
@@ -22,79 +22,47 @@ class Calibrator:
     def evaluate_equations(self):
         for value, numbers in self.equations.items():
             # We can put a + or * between the numbers
-            if value == "7290":
-                equations = self.write_equation(numbers)
-                for equation in equations:
-                    eq = self.evaluate_expression(equation)
-                    print(eq)
-                    print("----")
-                    print()
-                # print("Value:", value)
-                # print("These are the numbers:", numbers)
-                # for e in equations:
-                #     print(f"Eval eq: {e} = {eval(e)}")
-                #     print(eval(e) == int(value))
-                #     if eval(e) == int(value):
-                #         self.true_equations[value] = numbers
-                print("***")
-                print()
-                # if eval(equation) == int(value):
-                #     self.true_equations[value] = numbers
+            equations = self.write_equation(numbers)
+            for equation in equations:
+                result = self.evaluate_equation(equation)
+                if result == int(value):
+                    self.true_equations[value] = numbers
 
-        # print()
-        # print("TRUE EQUATIONS:")
-        # print(self.true_equations)
-        # # true_values = [int(k) for k in self.true_equations.keys()]
-        # print()
+        print()
+        print("TRUE EQUATIONS:")
+        print(self.true_equations)
+        true_values = [int(k) for k in self.true_equations.keys()]
+        print("True values:")
+        print(sum(true_values))
+        print()
 
-    def evaluate_expression(self, expr):
+    def evaluate_equation(self, equation):
         result = 0
         temporary_result = ""
-        equation = ""
+        operation = "+"
 
-        print("We start with:")
-        print(expr)
-        # The temporary result is a buildup of previous operations
-        for item in expr:
+        for item in equation:
             if item.isdigit():
                 temporary_result += item
-                equation += item
-
-            elif item == "||":
-                # if there is no result yet, just add the temporary result
-                if result == 0:
-                    result += int(temporary_result)
-                else:
-                    # Concatenate the temp + current result
-                    result = int(str(result) + temporary_result)
-
-                # After handling concatenation, make temporary result empty again
-                temporary_result = ""
-                equation += " || "
-
-            elif item in ["*", "+"]:
+            elif item in ["||", "+", "*"]:
                 if temporary_result:
-                    # Is this even possible?
-                    if result == 0:
-                        result = int(temporary_result)
-                    else:
-                        if item == "+":
-                            result += int(temporary_result)
-                        elif item == "*":
-                            result *= int(temporary_result)
-
-                    # After handling + or *, make temporary result empty again
+                    if operation == "||":
+                        result = int(str(result) + temporary_result)
+                    elif operation == "+":
+                        result += int(temporary_result)
+                    elif operation == "*":
+                        result *= int(temporary_result)
                     temporary_result = ""
-                equation += f" {item} "
+                operation = item
 
-            print(f"Current step: {equation} (Result: {result})")
-
-        # Handle the last number if there is one
+        # Handle the last number
         if temporary_result:
-            if result == 0:
-                result = int(temporary_result)
-            else:
+            if operation == "||":
                 result = int(str(result) + temporary_result)
+            elif operation == "+":
+                result += int(temporary_result)
+            elif operation == "*":
+                result *= int(temporary_result)
 
         return result
 
@@ -103,9 +71,9 @@ class Calibrator:
 
         combinations = self.generate_operation_combinations(numbers)
         for combination in combinations:
-            c = len(combination)
+            # Put the operation between the numbers
             combined_list = []
-            for index in range(c):
+            for index in range(len(combination)):
                 operation = [numbers[index], combination[index]]
                 combined_list.extend(operation)
             combined_list.append(numbers[-1])
